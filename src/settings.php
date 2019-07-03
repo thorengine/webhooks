@@ -59,7 +59,7 @@ return [
             'headers'  => [
                 'content-type' => 'application/json', 
             ],
-            'auth' => ['proofek', 'aNiVpdxZcRupA3zLuuN4'],
+            'auth' => ['proofek', ''],
             'debug'      => true,
         ],
     ],

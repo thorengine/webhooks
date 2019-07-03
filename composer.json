@@ -1,20 +1,17 @@
 {
-    "name": "slim/slim-skeleton",
-    "description": "A Slim Framework skeleton application for rapid development",
-    "keywords": ["microframework", "rest", "router", "psr7"],
-    "homepage": "http://github.com/slimphp/Slim-Skeleton",
+    "name": "thorengine/webhooks",
+    "description": "Simple web service that reacts to events sent by github",
+    "keywords": ["github", "webhooks"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Josh Lockhart",
-            "email": "info@joshlockhart.com",
-            "homepage": "http://www.joshlockhart.com/"
+            "name": "Sebastian Marek",
+            "email": "proofek@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.6",
         "guzzlehttp/guzzle": "~6.0",
-        "guzzlehttp/guzzle-services": "^1.1",
         "monolog/monolog": "^1.17",
         "slim/php-view": "^2.0",
         "slim/slim": "^3.1"
