@@ -12,11 +12,13 @@ Clone the repository from github
 
 	git clone https://github.com/thorengine/webhooks.git
 
-Install all the software depoendencies using composer
+Install all the software dependencies using composer
 
 	php composer.phar install
 
 # Run the web service
+
+Generate personal access token on github.com in Settings > Developer settings > Personal access tokens (and remember it, cause you will need it later).
 
 Start ngrok on port 8000
 
@@ -36,25 +38,30 @@ Start ngrok on port 8000
 
 Once started you will see the external URL that we will need to configure our webhook on github.com (line starting with Forwarding, the URL will look something like this: http://7b656e2d.ngrok.io). Bear in mind that every time you start ngrok this URL will change and the github webhook settings will have to be updated.
 
-Start the web service:
-
-	php -S localhost:8000 -t public public/index.php
-
 Head over to your organisations section on [GitHub](github.com) and open Webhooks section under Settings. CLick the Add webhook button and:
-- populate _Payload URL_ with the ngrok URL
+- populate _Payload URL_ with the ngrok URL and append _/payload_ to it, ie. http://7b656e2d.ngrok.io/payload
 - set _Content type_ to _application/json_
 - populate _Secret_ with a hard to guess text
 - click the _Let me select individual events_ radio button and make sure only _Repositories_ checkbox is checked.
 - make sure the _Active_ checkbox at the bottom is also checked
 - click _Add webhook_ button to save the changes.
 
+Start the web service using the secret provided when you set up the webhook and personal token generated:
+
+	GITHUB_SECRET=<secret> GITHUB_TOKEN=<token> php -S localhost:8000 -t public public/index.php
+
 If everything works fine you should see a green checkbox next to your new webhook in the Webhooks section.
+
+# Test the webhook
+
+1. Head over to github.com and open your organisation page
+2. Create a new repository (don't forget to tick _Initialize this repository with a README_ checkbox)
+3. Go to your repository _Settings > Branches_ and confirm protection has been applied to the master branch
+4. Go to your reposity _Issues_ and confirm an issue has been created and contains the protection details 
+
 
 # Requirements
 - [Composer](https://getcomposer.org/)
 - [PHP runtime >=5.6](https://php.net/)
 - [ngrok](https://ngrok.com/)
 
-# TODO
-- secure the webhook with the secret See [Securing webhooks](https://developer.github.com/webhooks/securing/)
-- blank the password from web service settings and replace it with a token provided as an environmental variable

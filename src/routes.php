@@ -9,35 +9,28 @@ use WebhooksApi\Github\Factory\EventFactory;
 return function (App $app) {
     $container = $app->getContainer();
 
-    $app->get('/[{name}]', function (Request $request, Response $response, array $args) use ($container) {
-        // Sample log message
-        $container->get('logger')->info("Slim-Skeleton '/' route");
-
-        // Render index view
-        return $container->get('renderer')->render($response, 'index.phtml', $args);
-    });
-
     $app->post('/payload', function (Request $request, Response $response, array $args) use ($container) {
 
+        $xHubSignature = current($request->getHeader('X-Hub-Signature'));
+        $githubSecret = $container->get('settings')['github']['secret'];
+        $body = (string)$request->getBody();
+
+        if ('sha1=' . hash_hmac('sha1', $body, $githubSecret) !== $xHubSignature) {
+            return new Response(401);
+        }
+
     	$httpClient = $container->get('httpClient');
-		$requestBody = $request->getParsedBody();
+	    $requestBody = $request->getParsedBody();	
 
 		$event = EventFactory::create($requestBody, $container);		
-		$container->get('logger')->info("Triggered payload! '{$event->getAction()}' {$event->getRepository()->getFullName()}");
     	
     	try {
     	
     		$event->process($container);	
 	     
-	    } catch (GuzzleHttp\Exception\ClientException $e) {
-            if ($e->hasResponse()) {
-                $container->get('logger')->info(GuzzleHttp\Exception\ClientException::getResponseBodySummary($e->getResponse()));
-                $code = $e->getResponse()->getStatusCode();
-                $container->get('logger')->info("CODE: {$code}");
-            }
-            error_log("EXCEPTION: " . print_r($e->getMessage(),1));
         } catch (\Exception $e) {
-            error_log("EXCEPTION: " . print_r($e,1));
+
+            return new Response(500);
         }
 	});
 };

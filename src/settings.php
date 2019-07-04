@@ -16,51 +16,17 @@ return [
             'level' => \Monolog\Logger::DEBUG,
         ],
 
-        // Github client
-        'githubClient_config' => [
-            'baseUri'    => 'https://api.github.com/',
-            'debug'      => true,
-            'operations' => [
-                'applyProtection' => [
-                    'httpMethod'    => 'PUT',
-                    'uri'           => '/repos/{organization}/{repository}/branches/master/protection',
-                    'responseModel' => 'getResponse',
-                    'parameters'    => [
-                        'Accept'       => [
-                            'type'      => 'string',
-                            'location'  => 'header',                            
-                        ],
-                        'organization' => [
-                            'type'      => 'string',
-                            'location'  => 'uri',
-                        ],
-                        'repository' => [
-                            'type'      => 'string',
-                            'location'  => 'uri',
-                        ],
-                        'payload'  => [
-                            'type'      => 'string',
-                            'location'  => 'body',
-                        ],
-                    ],
-                ]
-            ],
-            'models' => [
-                'getResponse' => [
-                    'type' => 'object',
-                    'additionalProperties' => [
-                        'location' => 'json'
-                    ]
-                ],
-            ]
-        ],
         'githubClient_options' => [
             'base_uri'    => 'https://api.github.com/',
             'headers'  => [
-                'content-type' => 'application/json', 
+                'content-type'  => 'application/json',
+                'Authorization' => 'token1 ' . getenv('GITHUB_TOKEN')
             ],
-            'auth' => ['proofek', ''],
-            'debug'      => true,
+            'debug'      => false,
         ],
+
+        'github' => [
+            'secret' => getenv('GITHUB_SECRET')
+        ]
     ],
 ];
