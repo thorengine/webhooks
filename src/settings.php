@@ -20,7 +20,7 @@ return [
             'base_uri'    => 'https://api.github.com/',
             'headers'  => [
                 'content-type'  => 'application/json',
-                'Authorization' => 'token1 ' . getenv('GITHUB_TOKEN')
+                'Authorization' => 'token ' . getenv('GITHUB_TOKEN')
             ],
             'debug'      => false,
         ],
